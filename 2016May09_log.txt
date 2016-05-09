@@ -1,0 +1,13 @@
+[SERVER]User connected.
+Red_Ninja2: Hello
+[SERVER]User connected.
+Red_Ninja2: Hello
+Red_Ninja2: How are you
+Red_Ninja2: I'm doing great, how about you?
+Red_Ninja2: I am also doing good.
+[SERVER]User connected.
+Red_Ninja2: I'm baack
+[SERVER]User connected.
+Red_Ninja2: I'm back again
+[SERVER]User connected.
+Red_Ninja2: hi

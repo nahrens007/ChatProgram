@@ -1,18 +1,32 @@
 package client;
 
+import java.awt.BorderLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
 /**
  * Created on January 10th, 2014
  * Author: Nathan
  */
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ConnectException;
+import java.net.Socket;
+import java.net.SocketException;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
-
-import javax.swing.*;
-
-import java.awt.*;
-import java.awt.event.*;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.JTextField;
+import javax.swing.ScrollPaneConstants;
 
 public class Client {
 
@@ -31,11 +45,21 @@ public class Client {
 	private FileWriter fileWriter;
 
 	/**
-	 * The method go() is the only method called by main(). It starts the app
-	 * up.
+	 * The method go() is the only method called by main(). It starts the
+	 * application up.
 	 */
-	public void go() {
+	public void runClient() {
 
+		setupWindow();
+
+		// Loads the settings for the application.
+		loadSettings(new File("settings.txt"));
+	}
+
+	/**
+	 * This method sets up the window.
+	 */
+	private void setupWindow() {
 		// sets the JPanel up for the GUI
 		JPanel mainPanel = new JPanel();
 
@@ -48,10 +72,8 @@ public class Client {
 		// places the incoming message text area in a scroll pane and formats
 		// the scroll pane
 		JScrollPane qScroller = new JScrollPane(incoming);
-		qScroller.setVerticalScrollBarPolicy(
-						ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
-		qScroller.setHorizontalScrollBarPolicy(
-						ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+		qScroller.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		qScroller.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
 
 		// sets the JTextFields up for outgoing messages, the IP, and the user
 		// name
@@ -93,7 +115,6 @@ public class Client {
 		frame.getContentPane().add(BorderLayout.CENTER, mainPanel);
 		frame.setSize(380, 600);
 		frame.setVisible(true);
-		loadSettings(new File("settings.txt"));
 	}
 
 	/**
@@ -104,8 +125,7 @@ public class Client {
 
 		try {
 			sock = new Socket(IP, 3440);
-			InputStreamReader streamReader = new InputStreamReader(
-							sock.getInputStream());
+			InputStreamReader streamReader = new InputStreamReader(sock.getInputStream());
 			reader = new BufferedReader(streamReader);
 			writer = new PrintWriter(sock.getOutputStream());
 			incoming.append("Connected. \n");
@@ -129,8 +149,7 @@ public class Client {
 				reader.close();
 			} catch (IOException e) {
 				System.out.println(e.getMessage());
-				System.out.println("disconnect() reader exception: "
-								+ e.getClass());
+				System.out.println("disconnect() reader exception: " + e.getClass());
 			}
 		if (sock != null)
 			try {
@@ -138,8 +157,7 @@ public class Client {
 				sock.close();
 			} catch (IOException e) {
 				System.out.println(e.getMessage());
-				System.out.println("disconnect() socket exception: "
-								+ e.getClass());
+				System.out.println("disconnect() socket exception: " + e.getClass());
 			}
 	}
 
@@ -159,11 +177,9 @@ public class Client {
 				writer.println(userID + ": " + outgoing.getText());
 				writer.flush();
 			} catch (NullPointerException e) {
-				System.out.println(
-								"Tried to send something to a non-existent server.");
+				System.out.println("Tried to send something to a non-existent server.");
 			} catch (Exception ex) {
-				System.out.println("SendButtonListener exception: "
-								+ ex.getClass());
+				System.out.println("SendButtonListener exception: " + ex.getClass());
 			}
 			outgoing.setText("");
 			outgoing.requestFocus();
@@ -186,20 +202,17 @@ public class Client {
 			try {
 				while ((message = reader.readLine()) != null) {
 					incoming.append(message + "\n");
-					incoming.setCaretPosition(
-									incoming.getDocument().getLength());// scrolls
-																		// to
-																		// bottom
+					incoming.setCaretPosition(incoming.getDocument().getLength());// scrolls
+																					// to
+																					// bottom
 				}
 			} catch (SocketException e) {
 				incoming.append("Disconnected from server\n");
 			} catch (NullPointerException e) {
 				// Do nothing when the pointer is null;
-				System.out.println(
-								"Tried to read something from a non-existent server.");
+				System.out.println("Tried to read something from a non-existent server.");
 			} catch (Exception ex) {
-				System.out.println(
-								"IncomingReader exception: " + ex.getClass());
+				System.out.println("IncomingReader exception: " + ex.getClass());
 			}
 		}
 	}
@@ -234,9 +247,10 @@ public class Client {
 				fileWriter.close();
 			} catch (IOException e) {
 				e.printStackTrace();
-				System.out.println("ConnectButtonListener exception:"
-								+ e.getClass());
+				System.out.println("ConnectButtonListener exception:" + e.getClass());
 			}
+
+			outgoing.requestFocus();
 
 		}
 	}
@@ -285,7 +299,7 @@ public class Client {
 
 	public static void main(String[] args) {
 
-		new Client().go();
+		new Client().runClient();
 	}
 
 }
