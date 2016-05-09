@@ -1,8 +1,9 @@
+package server;
 import java.io.*;
 import java.net.*;
 import java.util.*;
 
-public class ChatServer {
+public class Server {
 
 	private final static int SOCKET = 3440;
 	ArrayList clientOutputStreams;
@@ -133,6 +134,6 @@ public class ChatServer {
 
 	public static void main(String[] args) {
 
-		new ChatServer().go();
+		new Server().go();
 	}
 }

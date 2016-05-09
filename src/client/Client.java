@@ -1,3 +1,4 @@
+package client;
 
 /**
  * Created on January 10th, 2014
@@ -13,7 +14,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class ChatClient {
+public class Client {
 
 	// Instantiates required objects
 
@@ -284,7 +285,7 @@ public class ChatClient {
 
 	public static void main(String[] args) {
 
-		new ChatClient().go();
+		new Client().go();
 	}
 
 }
