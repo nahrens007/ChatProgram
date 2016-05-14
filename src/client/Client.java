@@ -1,14 +1,13 @@
+/**
+ * Created on January 10th, 2014
+ * @author Nathan
+ */
 
 package client;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
-/**
- * Created on January 10th, 2014
- * Author: Nathan
- */
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -42,7 +41,7 @@ public class Client
 	private PrintWriter writer;
 	private Socket sock;
 	private String IP;
-	private String userID;
+	private String username;
 	private String settingPath;
 	private FileWriter fileWriter;
 	
@@ -181,7 +180,7 @@ public class Client
 	 * server.
 	 * 
 	 * @author Nathan
-	 *		
+	 * 		
 	 */
 	private class SendButtonListener implements ActionListener
 	{
@@ -191,7 +190,7 @@ public class Client
 			
 			try
 			{
-				writer.println( userID + ": " + outgoing.getText() );
+				writer.println( username + ": " + outgoing.getText() );
 				writer.flush();
 			} catch ( NullPointerException e )
 			{
@@ -211,7 +210,7 @@ public class Client
 	 * server. If there is, it is appended to the incoming text area.
 	 * 
 	 * @author Nathan
-	 *		
+	 * 		
 	 */
 	public class IncomingReader implements Runnable
 	{
@@ -248,7 +247,7 @@ public class Client
 	 * a server using the IP address in the IP text field.
 	 * 
 	 * @author Nathan
-	 *		
+	 * 		
 	 */
 	public class ConnectButtonListener implements ActionListener
 	{
@@ -260,7 +259,7 @@ public class Client
 			// connecting to another one.
 			disconnect();
 			
-			userID = idFeild.getText();
+			username = idFeild.getText();
 			IP = ipFeild.getText();
 			setUpNetworking();
 			Thread readerThread = new Thread( new IncomingReader() );
@@ -271,7 +270,7 @@ public class Client
 			try
 			{
 				fileWriter = new FileWriter( settingPath );
-				fileWriter.write( IP + "/" + userID );
+				fileWriter.write( IP + "/" + username );
 				fileWriter.write( "\n" );
 				fileWriter.close();
 			} catch ( IOException e )
@@ -289,7 +288,7 @@ public class Client
 	 * This listener responds to the disconnect button being pressed.
 	 * 
 	 * @author Nathan
-	 *		
+	 * 		
 	 */
 	private class DisconnectButtonListener implements ActionListener
 	{

@@ -16,7 +16,7 @@ public class Server
 {
 	
 	private final static int SOCKET = 3440;
-	ArrayList<PrintWriter> clientOutputStreams;
+	ArrayList<Client> clients;
 	
 	/**
 	 * This inner class handles each individual client that connects using a new
@@ -28,7 +28,6 @@ public class Server
 	{
 		
 		BufferedReader reader;
-		Socket socket;
 		
 		/**
 		 * This constructor handles the connection of the client using the
@@ -36,24 +35,23 @@ public class Server
 		 * 
 		 * @param clientSocket
 		 */
-		public ClientHandler(Socket clientSocket)
+		public ClientHandler(Client client)
 		{
 			
 			try
 			{
 				// Get the client's input stream so that we can read messages
 				// from the client.
-				socket = clientSocket;
-				InputStreamReader isReader = new InputStreamReader( socket.getInputStream() );
-				reader = new BufferedReader( isReader );
-			} catch ( Exception ex )
+				reader = new BufferedReader(
+						new InputStreamReader( client.getSocket().getInputStream() ) );
+			} catch ( IOException e )
 			{
-				System.out.println( "ClientHandler() exception: " + ex.getMessage() );
+				System.out.println( "ClientHandler() exception: " + e.getMessage() );
 			}
 		}
 		
 		/**
-		 * This implemented method continuously reads for messages from clients,
+		 * This implemented method continuously waits for messages from clients,
 		 * and when received, broadcasts it to everyone.
 		 */
 		public void run()
@@ -62,14 +60,15 @@ public class Server
 			String message;
 			try
 			{
+				// Wait for a message to be sent from the client and handle it
 				while ( (message = reader.readLine()) != null )
 				{
 					System.out.println( "read " + message );
 					broadcast( message );
 				}
-			} catch ( Exception ex )
+			} catch ( IOException e )
 			{
-				System.out.println( "ClientHandler.run() exception: " + ex.getMessage() );
+				System.out.println( "ClientHandler.run() exception: " + e.getMessage() );
 			}
 		}
 	}
@@ -81,33 +80,28 @@ public class Server
 	public void runServer()
 	{
 		
-		clientOutputStreams = new ArrayList<PrintWriter>();
+		clients = new ArrayList<Client>();
 		try
 		{
 			@SuppressWarnings("resource")
-			ServerSocket serverSock = new ServerSocket( SOCKET );
+			ServerSocket serverSocket = new ServerSocket( SOCKET );
 			
 			while ( true )
 			{
-				// Accept any new client
-				Socket clientSocket = serverSock.accept();
-				
-				// Create the client's writer so the server can read it.
-				PrintWriter writer = new PrintWriter( clientSocket.getOutputStream() );
-				
-				// Add the new client's writer to the list of clients so that
-				// the server can send messages to them.
-				clientOutputStreams.add( writer );
+				// Accept any new client and adds it to the clients array list
+				Socket clientSocket = serverSocket.accept();
+				Client client = new Client( clientSocket );
+				clients.add( client );
 				
 				// Create a new thread to listen to that client
-				Thread t = new Thread( new ClientHandler( clientSocket ) );
+				Thread t = new Thread( new ClientHandler( client ) );
 				t.start();
 				broadcast( "[SERVER]User connected." );
 				
 			}
-		} catch ( Exception ex )
+		} catch ( IOException e )
 		{
-			System.out.println( "go() exception: " + ex.getMessage() );
+			System.out.println( "go() exception: " + e.getMessage() );
 		}
 	}
 	
@@ -120,20 +114,24 @@ public class Server
 	public void broadcast( String message )
 	{
 		
-		Iterator<PrintWriter> it = clientOutputStreams.iterator();
-		while ( it.hasNext() )
+		Iterator<Client> clientIt = clients.iterator();
+		while ( clientIt.hasNext() )
 		{
 			try
 			{
-				PrintWriter writer = it.next();
+				// Get the clients PrintWriter stream so that we can send
+				// messages to it.
+				PrintWriter writer = clientIt.next().getPrintWriter();
+				// Send the message to the client
 				writer.println( message );
 				writer.flush();
-			} catch ( Exception ex )
+			} catch ( Exception e )
 			{
-				System.out.println( "tellEveryone() exception: " + ex.getMessage() );
+				System.out.println( "broadcast() exception: " + e.getMessage() );
 			}
 		}
 		
+		// Log the message.
 		log( message );
 		
 	}
