@@ -1,8 +1,15 @@
 package server;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.io.BufferedReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Iterator;
 
 public class Server {
 
@@ -49,7 +56,7 @@ public class Server {
 			try {
 				while ((message = reader.readLine()) != null) {
 					System.out.println("read " + message);
-					tellEveryone(message);
+					broadcast(message);
 				}
 			} catch (Exception ex) {
 				System.out.println("ClientHandler.run() exception: " + ex.getMessage());
@@ -82,8 +89,8 @@ public class Server {
 				// Create a new thread to listen to that client
 				Thread t = new Thread(new ClientHandler(clientSocket));
 				t.start();
-				tellEveryone("[SERVER]User connected.");
-				
+				broadcast("[SERVER]User connected.");
+
 			}
 		} catch (Exception ex) {
 			System.out.println("go() exception: " + ex.getMessage());
@@ -94,8 +101,9 @@ public class Server {
 	 * This method broadcasts the message to everyone on the server.
 	 * 
 	 * @param message
+	 *            The String message to be sent to all connected clients.
 	 */
-	public void tellEveryone(String message) {
+	public void broadcast(String message) {
 
 		Iterator<PrintWriter> it = clientOutputStreams.iterator();
 		while (it.hasNext()) {
