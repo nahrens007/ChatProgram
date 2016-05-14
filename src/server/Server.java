@@ -18,6 +18,25 @@ public class Server
 	private final static int SOCKET = 3440;
 	ArrayList<Client> clients;
 	
+	// These fields are used as a prefix for all messages received.
+	/**
+	 * This field signals the closing of a connection so the server can remove
+	 * the client from the clients ArrayList and close its thread.
+	 */
+	public static final String CLOSE = "CLS";
+	/**
+	 * This field signals a normal message to be broadcasted to all clients.
+	 */
+	public static final String MESSAGE = "MSG";
+	/**
+	 * This field signals setting the username of the client.
+	 */
+	public static final String SET_USERNAME = "SUN";
+	/**
+	 * This field signals that the client is requesting his UUID.
+	 */
+	public static final String GET_UUID = "GID";
+	
 	/**
 	 * This inner class handles each individual client that connects using a new
 	 * thread for each client.
@@ -28,6 +47,7 @@ public class Server
 	{
 		
 		BufferedReader reader;
+		Client client;
 		
 		/**
 		 * This constructor handles the connection of the client using the
@@ -37,13 +57,13 @@ public class Server
 		 */
 		public ClientHandler(Client client)
 		{
-			
+			this.client = client;
 			try
 			{
 				// Get the client's input stream so that we can read messages
 				// from the client.
 				reader = new BufferedReader(
-						new InputStreamReader( client.getSocket().getInputStream() ) );
+						new InputStreamReader( this.client.getSocket().getInputStream() ) );
 			} catch ( IOException e )
 			{
 				System.out.println( "ClientHandler() exception: " + e.getMessage() );
@@ -58,13 +78,37 @@ public class Server
 		{
 			
 			String message;
+			String code;
+			String[] splitMessage;
 			try
 			{
 				// Wait for a message to be sent from the client and handle it
 				while ( (message = reader.readLine()) != null )
 				{
 					System.out.println( "read " + message );
-					broadcast( message );
+					splitMessage = message.split( ":", 2 ); // Split the message
+					code = splitMessage[0]; // Every message will have at least
+											// one part.
+					
+					if ( code.equals( Server.CLOSE ) )
+					{
+						System.out.println( "removing client " + clients.indexOf( this.client ) );
+						clients.remove( clients.indexOf( this.client ) );
+						return; // close the thread.
+					} else if ( code.equals( Server.SET_USERNAME ) )
+						this.client.setUsername( splitMessage[1] );
+					else if ( code.equals( Server.GET_UUID ) )
+						this.client.getPrintWriter().println( this.client.getUUID() );
+					else if ( code.equals( Server.MESSAGE ) )
+						
+						broadcast( this.client.getUsername() + ": " + splitMessage[1] );
+						
+					// If the message was not sent properly, i.e. without a
+					// code or with an invalid code, then the entire message
+					// will be sent.
+					else
+						broadcast( this.client.getUsername() + ": " + message );
+						
 				}
 			} catch ( IOException e )
 			{

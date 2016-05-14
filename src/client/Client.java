@@ -133,7 +133,12 @@ public class Client
 			sock = new Socket( IP, 3440 );
 			InputStreamReader streamReader = new InputStreamReader( sock.getInputStream() );
 			reader = new BufferedReader( streamReader );
+			
+			// Set up the writer and send the server the client's username
 			writer = new PrintWriter( sock.getOutputStream() );
+			writer.println( server.Server.SET_USERNAME + ":" + username );
+			writer.flush();
+			
 			incoming.append( "Connected. \n" );
 		} catch ( ConnectException e )
 		{
@@ -152,7 +157,11 @@ public class Client
 	{
 		
 		if ( writer != null )
+		{
+			writer.println( server.Server.CLOSE ); // Send the "CLOSE" signal to
+													// the server
 			writer.close();
+		}
 		if ( reader != null )
 			try
 			{
@@ -172,36 +181,6 @@ public class Client
 				System.out.println( e.getMessage() );
 				System.out.println( "disconnect() socket exception: " + e.getClass() );
 			}
-	}
-	
-	/**
-	 * When the send button is pressed (or enter is pressed while the input text
-	 * field has focus), the text in the input field attempts to be sent to the
-	 * server.
-	 * 
-	 * @author Nathan
-	 * 		
-	 */
-	private class SendButtonListener implements ActionListener
-	{
-		
-		public void actionPerformed( ActionEvent ev )
-		{
-			
-			try
-			{
-				writer.println( username + ": " + outgoing.getText() );
-				writer.flush();
-			} catch ( NullPointerException e )
-			{
-				System.out.println( "Tried to send something to a non-existent server." );
-			} catch ( Exception ex )
-			{
-				System.out.println( "SendButtonListener exception: " + ex.getClass() );
-			}
-			outgoing.setText( "" );
-			outgoing.requestFocus();
-		}
 	}
 	
 	/**
@@ -231,14 +210,45 @@ public class Client
 			} catch ( SocketException e )
 			{
 				incoming.append( "Disconnected from server\n" );
+				incoming.setCaretPosition( incoming.getDocument().getLength() );
 			} catch ( NullPointerException e )
 			{
 				// Do nothing when the pointer is null;
 				System.out.println( "Tried to read something from a non-existent server." );
+			} catch ( Exception e )
+			{
+				System.out.println( "IncomingReader exception: " + e.getClass() );
+			}
+		}
+	}
+	
+	/**
+	 * When the send button is pressed (or enter is pressed while the input text
+	 * field has focus), the text in the input field attempts to be sent to the
+	 * server.
+	 * 
+	 * @author Nathan
+	 * 		
+	 */
+	private class SendButtonListener implements ActionListener
+	{
+		
+		public void actionPerformed( ActionEvent ev )
+		{
+			
+			try
+			{
+				writer.println( server.Server.MESSAGE + ":" + outgoing.getText() );
+				writer.flush();
+			} catch ( NullPointerException e )
+			{
+				System.out.println( "Tried to send something to a non-existent server." );
 			} catch ( Exception ex )
 			{
-				System.out.println( "IncomingReader exception: " + ex.getClass() );
+				System.out.println( "SendButtonListener exception: " + ex.getClass() );
 			}
+			outgoing.setText( "" );
+			outgoing.requestFocus();
 		}
 	}
 	

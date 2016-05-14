@@ -119,3 +119,27 @@ Red_Ninja2:
 Red_Ninja2: 
 Red_Ninja2: hi
 Red_Ninja2: hi
+[SERVER]User connected.
+Red_Ninja2Hello
+[SERVER]User connected.
+SpartanHi
+SpartanHow are you
+Red_Ninja2I'm doing good. HBY?
+SpartanAlso doing good.
+[SERVER]User connected.
+[SERVER]User connected.
+[SERVER]User connected.
+[SERVER]User connected.
+[SERVER]User connected.
+[SERVER]User connected.
+Red_NinjaHi
+Red_Ninja2Hello!
+Red_Ninja2How are you?
+Red_NinjaI'm doing good.
+SpartanHi guys
+Red_Ninja2Why hello!
+Red_NinjaHI!
+Red_Ninja2This is fun
+Red_Ninja2Don't you think?
+SpartanI think so.
+Red_NinjaMe to, I: alwyas engjohd this
