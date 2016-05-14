@@ -9,5 +9,6 @@ More features are constantly being added, but here are a list of current feature
 # To do
 - Add functionality to color code users.
 - Add UUID's to users so that two different clients can connect to the same server with the same username but have seperate color codes.
+
 And I added a picture...
 <img src="smiley.png"/>
