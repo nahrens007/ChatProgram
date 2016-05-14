@@ -1,4 +1,5 @@
 package server;
+
 import java.io.*;
 import java.net.*;
 import java.util.*;
@@ -6,7 +7,7 @@ import java.util.*;
 public class Server {
 
 	private final static int SOCKET = 3440;
-	ArrayList clientOutputStreams;
+	ArrayList<PrintWriter> clientOutputStreams;
 
 	/**
 	 * This inner class handles each individual client that connects using a new
@@ -31,11 +32,10 @@ public class Server {
 				// Get the client's input stream so that we can read messages
 				// from the client.
 				socket = clientSocket;
-				InputStreamReader isReader = new InputStreamReader(
-								socket.getInputStream());
+				InputStreamReader isReader = new InputStreamReader(socket.getInputStream());
 				reader = new BufferedReader(isReader);
 			} catch (Exception ex) {
-				System.out.println(ex.getMessage());
+				System.out.println("ClientHandler() exception: " + ex.getMessage());
 			}
 		}
 
@@ -52,7 +52,7 @@ public class Server {
 					tellEveryone(message);
 				}
 			} catch (Exception ex) {
-				System.out.println(ex.getMessage());
+				System.out.println("ClientHandler.run() exception: " + ex.getMessage());
 			}
 		}
 	}
@@ -61,10 +61,11 @@ public class Server {
 	 * This method listens for new clients connecting and handles their
 	 * connection.
 	 */
-	public void go() {
+	public void runServer() {
 
-		clientOutputStreams = new ArrayList();
+		clientOutputStreams = new ArrayList<PrintWriter>();
 		try {
+			@SuppressWarnings("resource")
 			ServerSocket serverSock = new ServerSocket(SOCKET);
 
 			while (true) {
@@ -72,8 +73,7 @@ public class Server {
 				Socket clientSocket = serverSock.accept();
 
 				// Create the client's writer so the server can read it.
-				PrintWriter writer = new PrintWriter(
-								clientSocket.getOutputStream());
+				PrintWriter writer = new PrintWriter(clientSocket.getOutputStream());
 
 				// Add the new client's writer to the list of clients so that
 				// the server can send messages to them.
@@ -83,9 +83,10 @@ public class Server {
 				Thread t = new Thread(new ClientHandler(clientSocket));
 				t.start();
 				tellEveryone("[SERVER]User connected.");
+				
 			}
 		} catch (Exception ex) {
-			System.out.println(ex.getMessage());
+			System.out.println("go() exception: " + ex.getMessage());
 		}
 	}
 
@@ -96,14 +97,14 @@ public class Server {
 	 */
 	public void tellEveryone(String message) {
 
-		Iterator it = clientOutputStreams.iterator();
+		Iterator<PrintWriter> it = clientOutputStreams.iterator();
 		while (it.hasNext()) {
 			try {
-				PrintWriter writer = (PrintWriter) it.next();
+				PrintWriter writer = it.next();
 				writer.println(message);
 				writer.flush();
 			} catch (Exception ex) {
-				System.out.println(ex.getMessage());
+				System.out.println("tellEveryone() exception: " + ex.getMessage());
 			}
 		}
 
@@ -128,12 +129,12 @@ public class Server {
 			fileWriter.close();
 		} catch (IOException e) {
 			System.out.println("Couldn't write to log file");
-			System.out.println(e.getMessage());
+			System.out.println("log() exception: " + e.getMessage());
 		}
 	}
 
 	public static void main(String[] args) {
-
-		new Server().go();
+		System.out.println("Starting the server...");
+		new Server().runServer();
 	}
 }
