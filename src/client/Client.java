@@ -32,8 +32,26 @@ import javax.swing.ScrollPaneConstants;
 public class Client
 {
 	
-	// Instantiates required objects
+	// These fields are used as a prefix for all messages sent.
+	/**
+	 * This field signals the closing of a connection so the server can remove
+	 * the client from its list of receiving participants.
+	 */
+	private static final String CLOSE = "CLS";
+	/**
+	 * This field signals a normal message to be broadcasted to all clients.
+	 */
+	private static final String MESSAGE = "MSG";
+	/**
+	 * This field signals setting the username of the client.
+	 */
+	private static final String SET_USERNAME = "SUN";
+	/**
+	 * This field signals that the client is requesting his UUID.
+	 */
+	private static final String GET_UUID = "GID";
 	
+	// Instantiates required objects
 	private JTextArea incoming;
 	private JTextField outgoing;
 	private JTextField ipFeild;
@@ -141,7 +159,7 @@ public class Client
 			
 			// Set up the writer and send the server the client's username
 			writer = new PrintWriter( sock.getOutputStream() );
-			writer.println( server.Server.SET_USERNAME + ":" + username );
+			writer.println( Client.SET_USERNAME + ":" + username );
 			writer.flush();
 			
 			incoming.append( "Connected. \n" );
@@ -169,8 +187,8 @@ public class Client
 		
 		if ( writer != null )
 		{
-			writer.println( server.Server.CLOSE ); // Send the "CLOSE" signal to
-													// the server
+			writer.println( Client.CLOSE ); // Send the "CLOSE" signal to
+											// the server
 			writer.close();
 		}
 		if ( reader != null )
@@ -252,7 +270,7 @@ public class Client
 			
 			try
 			{
-				writer.println( server.Server.MESSAGE + ":" + outgoing.getText() );
+				writer.println( Client.MESSAGE + ":" + outgoing.getText() );
 				writer.flush();
 			} catch ( NullPointerException e )
 			{

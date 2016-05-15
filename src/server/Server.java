@@ -23,19 +23,19 @@ public class Server
 	 * This field signals the closing of a connection so the server can remove
 	 * the client from the clients ArrayList and close its thread.
 	 */
-	public static final String CLOSE = "CLS";
+	private static final String CLOSE = "CLS";
 	/**
 	 * This field signals a normal message to be broadcasted to all clients.
 	 */
-	public static final String MESSAGE = "MSG";
+	private static final String MESSAGE = "MSG";
 	/**
 	 * This field signals setting the username of the client.
 	 */
-	public static final String SET_USERNAME = "SUN";
+	private static final String SET_USERNAME = "SUN";
 	/**
 	 * This field signals that the client is requesting his UUID.
 	 */
-	public static final String GET_UUID = "GID";
+	private static final String GET_UUID = "GID";
 	
 	/**
 	 * This inner class handles each individual client that connects using a new

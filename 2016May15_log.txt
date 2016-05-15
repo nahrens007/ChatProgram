@@ -1,0 +1,3 @@
+[SERVER]User connected.
+Red_Ninja2: Hi
+Red_Ninja2 has left the server.
