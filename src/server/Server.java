@@ -15,7 +15,7 @@ import java.util.Iterator;
 public class Server
 {
 	
-	private final int socket = 34400;
+	private final int port = 34400;
 	private ArrayList<Client> clients;
 	
 	// These fields are used as a prefix for all messages received.
@@ -136,7 +136,7 @@ public class Server
 		try
 		{
 			@SuppressWarnings("resource")
-			ServerSocket serverSocket = new ServerSocket( socket );
+			ServerSocket serverSocket = new ServerSocket( port );
 			
 			while ( true )
 			{

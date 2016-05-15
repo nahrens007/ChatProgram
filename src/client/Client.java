@@ -51,6 +51,8 @@ public class Client
 	 */
 	private static final String GET_UUID = "GID";
 	
+	private final int port = 34400;
+	
 	// Instantiates required objects
 	private JTextArea incoming;
 	private JTextField outgoing;
@@ -153,7 +155,7 @@ public class Client
 		
 		try
 		{
-			sock = new Socket( IP, 34400 );
+			sock = new Socket( IP, port );
 			InputStreamReader streamReader = new InputStreamReader( sock.getInputStream() );
 			reader = new BufferedReader( streamReader );
 			
@@ -162,13 +164,13 @@ public class Client
 			writer.println( Client.SET_USERNAME + ":" + username );
 			writer.flush();
 			
-			incoming.append( "Connected. \n" );
+			append( "Connected. \n" );
 		} catch ( ConnectException e )
 		{
 			throw new ConnectException();
 		} catch ( UnknownHostException e )
 		{
-			incoming.append( "Unknown host." );
+			append( "Unknown host." );
 		} catch ( IOException e )
 		{
 			System.out.println( "IOException in setUpNetworking()" );
@@ -213,6 +215,20 @@ public class Client
 	}
 	
 	/**
+	 * This method appends the message to the "incoming" JTextArea and scrolls
+	 * to the newest message.
+	 * 
+	 * @param message
+	 *            The message to be appended to the JTextArea
+	 */
+	private void append( String message )
+	{
+		
+		incoming.append( message );
+		incoming.setCaretPosition( incoming.getDocument().getLength() );
+	}
+	
+	/**
 	 * This method starts another thread in order to continually checks the
 	 * reader stream in order to check if there is a new message from the
 	 * server. If there is, it is appended to the incoming text area.
@@ -231,15 +247,11 @@ public class Client
 			{
 				while ( (message = reader.readLine()) != null )
 				{
-					incoming.append( message + "\n" );
-					incoming.setCaretPosition( incoming.getDocument().getLength() );// scrolls
-																					// to
-																					// bottom
+					append( message + "\n" );
 				}
 			} catch ( SocketException e )
 			{
-				incoming.append( "Disconnected from server\n" );
-				incoming.setCaretPosition( incoming.getDocument().getLength() );
+				append( "Disconnected from server\n" );
 			} catch ( NullPointerException e )
 			{
 				// Do nothing when the pointer is null;
@@ -313,7 +325,7 @@ public class Client
 				readerThread.start();
 			} catch ( ConnectException e )
 			{
-				incoming.append( "Connection failed. \n" );
+				append( "Connection failed. \n" );
 			}
 			
 			// saves IP and user name to a file
@@ -377,7 +389,7 @@ public class Client
 			reader.close();
 		} catch ( FileNotFoundException e )
 		{
-			incoming.append( "Couldn't load settings file. Please enter IP and user name.\n" );
+			append( "Couldn't load settings file. Please enter IP and user name.\n" );
 		} catch ( IOException e )
 		{
 			System.out.println( "loadSettings() exception:" + e.getClass() );
