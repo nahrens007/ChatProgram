@@ -16,7 +16,8 @@ public class Server
 {
 	
 	private final static int SOCKET = 3440;
-	ArrayList<Client> clients;
+	private ArrayList<Client> clients;
+	private int threadCounter = 0;
 	
 	// These fields are used as a prefix for all messages received.
 	/**
@@ -77,9 +78,14 @@ public class Server
 		public void run()
 		{
 			
+			synchronized ( this )
+			{
+				threadCounter++;
+			}
 			String message;
 			String code;
 			String[] splitMessage;
+			
 			try
 			{
 				// Wait for a message to be sent from the client and handle it
@@ -93,8 +99,13 @@ public class Server
 					// Respond to the code
 					if ( code.equals( Server.CLOSE ) )
 					{
-						broadcast( this.client.getUsername() + " has left the server." );
 						clients.remove( clients.indexOf( this.client ) );
+						
+						// Broadcasting that the user has disconnected must
+						// occur after the client is removed, otherwise there
+						// will be a conflict with the clients ArrayList in
+						// broadcast()
+						broadcast( this.client.getUsername() + " has left the server." );
 						break; // close the thread by breaking out of the loop.
 					} else if ( code.equals( Server.SET_USERNAME ) )
 						this.client.setUsername( splitMessage[1] );
@@ -115,6 +126,12 @@ public class Server
 			{
 				System.out.println( "ClientHandler.run() exception: " + e.getMessage() );
 			}
+			
+			synchronized ( this )
+			{
+				threadCounter--;
+			}
+			System.out.println( threadCounter );
 		}
 	}
 	
@@ -156,7 +173,7 @@ public class Server
 	 * @param message
 	 *            The String message to be sent to all connected clients.
 	 */
-	public void broadcast( String message )
+	public synchronized void broadcast( String message )
 	{
 		
 		Iterator<Client> clientIt = clients.iterator();
