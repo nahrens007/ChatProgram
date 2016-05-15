@@ -135,7 +135,7 @@ public class Client
 		
 		try
 		{
-			sock = new Socket( IP, 3440 );
+			sock = new Socket( IP, 34400 );
 			InputStreamReader streamReader = new InputStreamReader( sock.getInputStream() );
 			reader = new BufferedReader( streamReader );
 			

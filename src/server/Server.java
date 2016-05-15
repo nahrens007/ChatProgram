@@ -15,9 +15,8 @@ import java.util.Iterator;
 public class Server
 {
 	
-	private final static int SOCKET = 3440;
+	private final int socket = 34400;
 	private ArrayList<Client> clients;
-	private int threadCounter = 0;
 	
 	// These fields are used as a prefix for all messages received.
 	/**
@@ -78,10 +77,6 @@ public class Server
 		public void run()
 		{
 			
-			synchronized ( this )
-			{
-				threadCounter++;
-			}
 			String message;
 			String code;
 			String[] splitMessage;
@@ -127,11 +122,6 @@ public class Server
 				System.out.println( "ClientHandler.run() exception: " + e.getMessage() );
 			}
 			
-			synchronized ( this )
-			{
-				threadCounter--;
-			}
-			System.out.println( threadCounter );
 		}
 	}
 	
@@ -146,7 +136,7 @@ public class Server
 		try
 		{
 			@SuppressWarnings("resource")
-			ServerSocket serverSocket = new ServerSocket( SOCKET );
+			ServerSocket serverSocket = new ServerSocket( socket );
 			
 			while ( true )
 			{
