@@ -19,6 +19,7 @@ import java.io.PrintWriter;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -124,8 +125,12 @@ public class Client
 	/**
 	 * This method attempts to connect to the server at the specified IP
 	 * address.
+	 * 
+	 * @throws ConnectException
+	 *             It will be thrown if the connection to the server is
+	 *             unsuccessful.
 	 */
-	public void setUpNetworking()
+	public void setUpNetworking() throws ConnectException
 	{
 		
 		try
@@ -142,11 +147,17 @@ public class Client
 			incoming.append( "Connected. \n" );
 		} catch ( ConnectException e )
 		{
-			incoming.append( "Connection failed. \n" );
-		} catch ( IOException ex )
+			throw new ConnectException();
+		} catch ( UnknownHostException e )
 		{
-			ex.getMessage();
-			System.out.println( "setUpNetwork() exception: " + ex.getClass() );
+			incoming.append( "Unknown host." );
+		} catch ( IOException e )
+		{
+			System.out.println( "IOException in setUpNetworking()" );
+		} catch ( Exception e )
+		{
+			e.getMessage();
+			System.out.println( "setUpNetwork() exception: " + e.getClass() );
 		}
 	}
 	
@@ -215,6 +226,9 @@ public class Client
 			{
 				// Do nothing when the pointer is null;
 				System.out.println( "Tried to read something from a non-existent server." );
+			} catch ( IOException e )
+			{
+			
 			} catch ( Exception e )
 			{
 				System.out.println( "IncomingReader exception: " + e.getClass() );
@@ -271,9 +285,18 @@ public class Client
 			
 			username = idFeild.getText();
 			IP = ipFeild.getText();
-			setUpNetworking();
-			Thread readerThread = new Thread( new IncomingReader() );
-			readerThread.start();
+			
+			// Try to set up the networking. If unsuccessful, then do not start
+			// the reader thread.
+			try
+			{
+				setUpNetworking();
+				Thread readerThread = new Thread( new IncomingReader() );
+				readerThread.start();
+			} catch ( ConnectException e )
+			{
+				incoming.append( "Connection failed. \n" );
+			}
 			
 			// saves IP and user name to a file
 			settingPath = "settings.txt";

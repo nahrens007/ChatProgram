@@ -90,11 +90,12 @@ public class Server
 					code = splitMessage[0]; // Every message will have at least
 											// one part.
 					
+					// Respond to the code
 					if ( code.equals( Server.CLOSE ) )
 					{
-						System.out.println( "removing client " + clients.indexOf( this.client ) );
+						broadcast( this.client.getUsername() + " has left the server." );
 						clients.remove( clients.indexOf( this.client ) );
-						return; // close the thread.
+						break; // close the thread by breaking out of the loop.
 					} else if ( code.equals( Server.SET_USERNAME ) )
 						this.client.setUsername( splitMessage[1] );
 					else if ( code.equals( Server.GET_UUID ) )
@@ -169,9 +170,9 @@ public class Server
 				// Send the message to the client
 				writer.println( message );
 				writer.flush();
-			} catch ( Exception e )
+			} catch ( IOException e )
 			{
-				System.out.println( "broadcast() exception: " + e.getMessage() );
+				System.out.println( "broadcast() exception: " + e.getMessage() + e );
 			}
 		}
 		
