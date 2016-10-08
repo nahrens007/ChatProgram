@@ -32,7 +32,7 @@ public class ChatClient {
 	/**
 	 * The method go() is the only method called by main(). It starts the app
 	 * up.
-	 */
+	 */ 
 	public void go() {
 
 		// sets the JPanel up for the GUI
