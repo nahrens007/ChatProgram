@@ -1,0 +1,161 @@
+[SERVER]User connected.
+Red_Ninja2: Hi
+Red_Ninja2 has left the server.
+[SERVER]User connected.
+Red_Ninja2: Hello
+Red_Ninja2: Hello
+Red_Ninja2 has left the server.
+[SERVER]User connected.
+Red_Ninja2 has left the server.
+[SERVER]User connected.
+Red_Ninja2: 
+[SERVER]User connected.
+Lord_Bard_42: Hi?
+Red_Ninja2: Why hello!
+Lord_Bard_42: Woah!
+Red_Ninja2: IT WORKS IT WORKS
+Lord_Bard_42: I know! That is quite impressive!
+Red_Ninja2: No emojis yet though :D
+Lord_Bard_42: So when are you going to explain all this?
+Lord_Bard_42: I mean I see the comments, but still..
+Red_Ninja2: Idk, adding emojis would be quite the project
+Red_Ninja2: Yeah the comments are somewhat unhelpful
+Lord_Bard_42: .
+Lord_Bard_42: .
+Lord_Bard_42: .
+Lord_Bard_42: .
+Lord_Bard_42: .
+Lord_Bard_42: .
+Lord_Bard_42: .
+Lord_Bard_42: .
+Lord_Bard_42: ..
+Lord_Bard_42: .
+Lord_Bard_42: .
+Lord_Bard_42: .
+Lord_Bard_42: .
+Lord_Bard_42: .
+Lord_Bard_42: .
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: 
+Red_Ninja2: lol
+Lord_Bard_42: Sorry, wanted to see the scroll bar :)
+Red_Ninja2: :D
+Lord_Bard_42: :D 
+Lord_Bard_42: Very cool
+Lord_Bard_42: The GUI part I understand
+Red_Ninja2: When I was first learning GUI I got super excited with the scroll bar :P 
+Lord_Bard_42: lol
+Red_Ninja2: I was like, YEAH MAN! I NEED THAT
+Lord_Bard_42: sock = new Socket( IP, 34400 );
+Lord_Bard_42: What is that?
+Red_Ninja2: That actually makes the connection with the server
+Lord_Bard_42: What is 34400
+Red_Ninja2: It allows the server/client to talk to each other
+Red_Ninja2: that is the port number
+Red_Ninja2: Its the port I have to forward in the router to the computer hosting (running) the server, which happens to be my laptop right now
+Red_Ninja2: The IP is, as you probably guessed, the IP address of the server, which is read from the IP text field when the user presses connect
+Red_Ninja2: So pretty much its 98.125.29.131 in this instance
+Lord_Bard_42: Gotcha
+Red_Ninja2: Then all that stuff in the setUpNetworking() about InputStreamReaders and reader and writer and stuff is all the stuff that is used to send and receive text from the server
+Red_Ninja2: Then the incoming object is the JTextArea that displays all the text - the place inside the scroll area. So when I do incoming.append( ... ) it appends the text to that place
+Lord_Bard_42: gotcha
+Red_Ninja2: writer.println( Client.SET_USERNAME + ":" + username );
+Red_Ninja2: Line 162
+Lord_Bard_42: It is intense!
+Red_Ninja2: That probably doesn't make sense.
+Lord_Bard_42: Bits and pieces do, but overall, no :D 
+Red_Ninja2: The way I set up the server reading text from the client is...
+Red_Ninja2: Every message received from clients is supposed to contain two parts: a 3 character "code" and then the message seperated by a ":"
+Red_Ninja2: The 3 letter codes are the static final variables around lines 40-52
+Lord_Bard_42: I see
+Red_Ninja2: They tell the server what type of message it is that it is recieving. So on line 162 what its doing is telling the server that the client wants to set its username
+Lord_Bard_42: It is dinner time, here, we will have to talk about it later, see yah!  
+Red_Ninja2: The 3 character code for setting the username is SUN
+Lord_Bard_42: And type of message?
+Red_Ninja2: Oh ok Yup
+Red_Ninja2 has left the server.
+[SERVER]User connected.
+Red_Ninja2: Yea
+Red_Ninja2: SUN is one type (setting the username
+Red_Ninja2: CLS - disconnecting
+Lord_Bard_42: Oh
+Red_Ninja2: etc..
+Lord_Bard_42: And messages and close
+Lord_Bard_42: 
+Red_Ninja2: MSG is jsut a normal message
+Lord_Bard_42: Different actions the client does
+Red_Ninja2: Yea
+Lord_Bard_42: I see
+Red_Ninja2: Alright by
+Lord_Bard_42: Well, I got to go! Bye!
+Lord_Bard_42 has left the server.
+Red_Ninja2: bye*
+[SERVER]User connected.
+Lord_Bard_42 has left the server.
+[SERVER]User connected.
+Lord_Bard_42 has left the server.
+[SERVER]User connected.
+Red_Ninja2: Hey hey
+Lord_Bard_42 has left the server.
+Red_Ninja2: lol
+[SERVER]User connected.
+Lord_Bard_42: LOL
+Red_Ninja2: lol
+Lord_Bard_42: See yah
+Lord_Bard_42 has left the server.
+Red_Ninja2: bye
+Red_Ninja2 has left the server.
