@@ -51,8 +51,8 @@ public class Client
 	 */
 	private static final String GET_UUID = "GID";
 	
-	private final int port = 34400;
-	
+	//private final int port = 34400;
+	private final int port = 8029;
 	// Instantiates required objects
 	private JTextArea incoming;
 	private JTextField outgoing;

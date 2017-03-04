@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -15,7 +16,8 @@ import java.util.Iterator;
 public class Server
 {
 	
-	private final int port = 34400;
+	// private final int port = 34400;
+	private final int port = 8029;
 	private ArrayList<Client> clients;
 	
 	// These fields are used as a prefix for all messages received.
@@ -115,13 +117,20 @@ public class Server
 					// will be sent.
 					else
 						broadcast( this.client.getUsername() + ": " + message );
-						
+					
 				}
+			} catch ( SocketException e )
+			{
+				// this occurs when a user unexpectedly disconnects
+				// remove disconnected user from list of clients and broadcast
+				// that he has left.
+				clients.remove( clients.indexOf( this.client ) );
+				broadcast( this.client.getUsername() + " has left the server." );
 			} catch ( IOException e )
 			{
 				System.out.println( "ClientHandler.run() exception: " + e.getMessage() );
+				e.printStackTrace();
 			}
-			
 		}
 	}
 	
