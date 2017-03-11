@@ -1,1 +1,1 @@
-nateshot.homenet.org/nateshot2
+localhost/nateshot2

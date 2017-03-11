@@ -51,8 +51,8 @@ public class Client
 	 */
 	private static final String GET_UUID = "GID";
 	
-	//private final int port = 34400;
-	private final int port = 8029;
+	 private int port = 34400;
+	//private int port = 8029;
 	// Instantiates required objects
 	private JTextArea incoming;
 	private JTextField outgoing;
@@ -234,7 +234,7 @@ public class Client
 	 * server. If there is, it is appended to the incoming text area.
 	 * 
 	 * @author Nathan
-	 * 		
+	 * 
 	 */
 	public class IncomingReader implements Runnable
 	{
@@ -258,7 +258,7 @@ public class Client
 				System.out.println( "Tried to read something from a non-existent server." );
 			} catch ( IOException e )
 			{
-			
+				
 			} catch ( Exception e )
 			{
 				System.out.println( "IncomingReader exception: " + e.getClass() );
@@ -272,7 +272,7 @@ public class Client
 	 * server.
 	 * 
 	 * @author Nathan
-	 * 		
+	 * 
 	 */
 	private class SendButtonListener implements ActionListener
 	{
@@ -301,7 +301,7 @@ public class Client
 	 * a server using the IP address in the IP text field.
 	 * 
 	 * @author Nathan
-	 * 		
+	 * 
 	 */
 	public class ConnectButtonListener implements ActionListener
 	{
@@ -314,8 +314,12 @@ public class Client
 			disconnect();
 			
 			username = idFeild.getText();
-			IP = ipFeild.getText();
+			String[] ip = ipFeild.getText().split( ":" );
 			
+			IP = ip[0];
+			if ( ip.length > 1 )
+				port = Integer.parseInt( ip[1] );
+				
 			// Try to set up the networking. If unsuccessful, then do not start
 			// the reader thread.
 			try
@@ -351,7 +355,7 @@ public class Client
 	 * This listener responds to the disconnect button being pressed.
 	 * 
 	 * @author Nathan
-	 * 		
+	 * 
 	 */
 	private class DisconnectButtonListener implements ActionListener
 	{
