@@ -1,7 +1,7 @@
 # ChatProgram
 This chat program is not a normal chity chaty application that allows you to talk to your friends; ney, this program allows you to host your own chat server!
 
-#How to use
+# How to use
 1) Compile src/client/Client.java; this class is the main client program (GUI application)<br/>
 2) Compile src/server/Server.java; this class is the main server program (hosts the server and manages connections)
 
